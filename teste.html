@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Exemplo de Gif com Áudio</title>
+  <style>
+    #button-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      border-radius: 100px;
+    }
+
+    .gif-container {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 9999;
+    }
+
+    .gif-container.left {
+      left: -200px;
+    }
+
+    .gif-container.right {
+      right: -200px;
+      width: 100px;
+      height: 100px;
+    }
+  </style>
+</head>
+<body bgcolor="blueviolet">
+  <div id="button-container">
+    <button onclick="exibirGifComAudio()" style="background-color: rgb(43, 2, 81); color: black; border-radius: 50px;"><font size="100px">KURU KURU KURU KURIN</font></button>
+  </div>
+  
+  <div id="audio-container"></div>
+
+  <div class="gif-container left">
+    <img src="" class="gif-image">
+  </div>
+
+  <div class="gif-container right">
+    <img src="" class="gif-image">
+  </div>
+  
+  <script>
+    function exibirGifComAudio() {
+      var gifUrls = [
+        "kururin.gif",
+        "kururin.gif"
+      ];
+      var audioUrl = "kuru.mp3";
+      
+      // Cria os elementos dos gifs
+      var gifElements = document.getElementsByClassName("gif-image");
+      for (var i = 0; i < gifElements.length; i++) {
+        gifElements[i].src = gifUrls[i];
+      }
+
+      // Obtém os contêineres dos gifs
+      var gifContainers = document.getElementsByClassName("gif-container");
+      
+      // Exibe os gifs
+      for (var i = 0; i < gifContainers.length; i++) {
+        gifContainers[i].style.display = "block";
+      }
+
+      // Move os gifs
+      var positions = [-200, window.innerWidth + 200]; // Posições iniciais dos gifs
+
+      function moveGifs() {
+        for (var i = 0; i < gifContainers.length; i++) {
+          positions[i] += i === 0 ? 5 : -5; // Altera a posição do gif
+
+          if (i === 0 && positions[i] > window.innerWidth) {
+            positions[i] = -200;
+            gifContainers[i].style.left = positions[i] + "px";
+          } else if (i === 1 && positions[i] < -200) {
+            positions[i] = window.innerWidth + 200;
+            gifContainers[i].style.left = positions[i] + "px";
+          } else {
+            gifContainers[i].style.left = positions[i] + "px";
+          }
+        }
+
+        // Repete a animação em um intervalo de tempo
+        requestAnimationFrame(moveGifs);
+      }
+
+      // Inicia a animação dos gifs
+      moveGifs();
+
+      // Cria o elemento do áudio
+      var audioElement = document.createElement("audio");
+      audioElement.src = audioUrl;
+      audioElement.controls = true;
+      
+      // Obtém o contêiner do áudio
+      var audioContainer = document.getElementById("audio-container");
+      
+      // Remove qualquer áudio anteriormente exibido
+      while (audioContainer.firstChild) {
+        audioContainer.firstChild.remove();
+      }
+      
+      // Adiciona o novo áudio ao contêiner
+      audioContainer.appendChild(audioElement);
+      
+      // Reproduz o áudio
+      audioElement.play();
+    }
+  </script>
+</body>
+</html>
